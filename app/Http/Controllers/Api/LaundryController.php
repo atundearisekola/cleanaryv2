@@ -13,7 +13,9 @@ use App\KleanaryList;
 use App\KleanaryItem;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Paystack;
+use App\Paystack;
+use App\Payments;
+use App\Coupon;
 use Intervention\Image\ImageManagerStatic as Image;
 use Carbon\Carbon;
 class LaundryController extends Controller
@@ -50,8 +52,11 @@ class LaundryController extends Controller
         $pickupDate = $request->input('pickupDate');
         $deliveryDate = $request->input('deliveryDate');
         $shortNote = $request->input('shortNote');
+        $coupon = $request->input('coupon');
 
         $laundry= new Laundry();
+
+      
 
          $ironprice = 150;
          $clothestotal=0;
@@ -60,9 +65,10 @@ class LaundryController extends Controller
          $txref = $this->randStrGennosc($len);
          $dtime = $txref.time();
          $img ="";
+         $couponExp="";
 
 
-          for ($i=0; $i < count($imgSrc)-1; $i++) {
+          for ($i=0; $i <= count($imgSrc)-1; $i++) {
 
               $image= $imgSrc[$i]['url'];
               $fl= $imgSrc[$i]['filename'];
@@ -138,7 +144,7 @@ class LaundryController extends Controller
         }
         }
          $p = ['perfname'=> $perfumename, 'perfprice'=> $perfumeprice];
-         $laundry->favperf = json_encode($p); 
+         $laundry->favperfume = json_encode($p); 
         
       
 
@@ -175,6 +181,7 @@ class LaundryController extends Controller
       $ironinputs = $todoIron;
         $niron = count($ironinputs);
         for ($i=0; $i <=count($ironinputs)-1; $i++) { 
+          $totalnum = $totalnum + $i;
             $todo= $ironinputs[$i]['todo'];
           $filename= $dtime.$ironinputs[$i]['filename'];
           // $url= $ironinputs[$i]['url'];
@@ -198,9 +205,19 @@ class LaundryController extends Controller
           $laundry->shortnote = $shortNote;
 
         $perfumeprice = $perfumeprice*$nperfume;
-        $starchprice = $starchprice*$nstarch;
+        $ironprice = $starchprice+$ironprice;
         $ironprice = $ironprice*$niron;
-        $totalprice =  $clothestotal+$perfumeprice+$starchprice+$ironprice;
+        $totalprice =  $clothestotal+$perfumeprice+$ironprice;
+          if ($coupon !="") {
+         $excoupon = Coupon::where('coupon',$coupon)->first();
+         if ($excoupon !="") {
+           $laundry->coupon = $coupon;
+            $couponExp = $excoupon->expire;
+           $couponPercent = $excoupon->percent; 
+           $percent = $totalprice*$couponPercent;
+           $totalprice = $totalprice - $percent;
+         }
+        }
         $laundry->totalprice = $totalprice; 
         $laundry->laundryimg = $img; 
       
@@ -335,7 +352,7 @@ public function laundryimage($filename)
 
      public function confirmStatus(Request $request)
     {
-      if ($request['status'] == "PICKING") {
+      if ($request['status'] == "PICKED") {
           $laundry = Laundry::where([['user_id',Auth::user()->id],['id','=',$request['id']],['lstatus','=','PICKING']])->first();
       }else {
           $laundry = Laundry::where([['user_id',Auth::user()->id],['id','=',$request['id']],['lstatus','=','DELIVERING']])->first();
@@ -351,5 +368,46 @@ public function laundryimage($filename)
        
        
 
+    }
+
+
+     public function giveValue(Request $request)
+    {
+      
+      $txtype = $request['txtype'];
+$txref = $request['txref'];
+    
+        
+       
+        $pay = new Payments();
+        $laundry = Laundry::where('txref','=',$txref)->first();
+
+        if ($txtype === "Cash") {
+         
+             $laundry->paymentstatus = 'Cash';
+             $laundry->update();
+           
+         
+        } else {
+          $status = $request['status'];
+     
+     // $amount = $request['amount'];
+           $pay->txref = $txref;
+          $pay->uid = $laundry->user_id;
+          $pay->status = $status;
+           $pay->totalamount = $laundry->totalprice;
+           $pay->lid = $laundry->id;
+           // $pay->branch = $laundry->picker;
+             $laundry->paymentstatus = 'success';
+             $laundry->update();
+            $pay->save();
+        }
+        
+
+       
+
+ 
+
+          return response()->json(['msg'=>'successful','laundry'=>$laundry, 'status'=>200],200);
     }
 }

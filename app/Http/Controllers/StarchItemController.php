@@ -39,7 +39,7 @@ class StarchItemController extends Controller
      public function deleteItem($id)
     {
          
-         $starchItem = StarchItem::find('id',$id);
+         $starchItem = StarchItem::where('id',$id)->first();
   
           if ($starchItem->delete()) {
               

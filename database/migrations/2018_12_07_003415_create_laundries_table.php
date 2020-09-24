@@ -35,6 +35,7 @@ class CreateLaundriesTable extends Migration
             $table->string('country');
             $table->string('state');
             $table->string('localgov');
+            $table->string('coupon')->nullable();
             $table->string('lat')->nullable();
             $table->string('longi')->nullable();
             $table->timestamps('pickup_at')->nullable();

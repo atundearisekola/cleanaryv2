@@ -66,8 +66,9 @@ class PickerController extends Controller
 
          public function deliverlaundry($id)
     {
-        $picker = Picker::where('id',$id)->first();
+      
         $picklaundry = Laundry::where('id',$id)->first();
+          $picker = Picker::where('laundry',$id)->first();
         if ($picklaundry->picker = Auth::guard('branchadmin')->user()->branch) {
             
             $picker->lstatus = 'DELIVERING';

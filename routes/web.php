@@ -145,6 +145,12 @@ Route::post('/update-starch', 'StarchItemController@updateItem')->name("update-s
 Route::get('/delete-starch/{id}', 'StarchItemController@deleteItem')->name("delete-starch");
 
 
+Route::post('/coupon', 'CouponController@addItem')->name("coupon");
+Route::get('/coupon', 'CouponController@showCoupons');
+Route::post('/update-coupon', 'CouponController@updateItem')->name("update-coupon");
+Route::get('/delete-coupon/{id}', 'CouponController@deleteItem')->name("delete-coupon");
+
+
 });
 
 Route::group(['prefix' => 'branchadmin'], function () {

@@ -36,8 +36,8 @@
   
     <dt class="list-group-item active">Favorites</dt>
 
-    <dt class="list-group-item">Starch: <span id="favstarch" >{{$singlep->favstarch["starchname"]}}</span></dt>
-<dt class="list-group-item">Perfume: <span id="favperfume" >{{$singlep->favperf["perfname"]}}</span></dt>
+    <dt class="list-group-item">Starch: <span id="favstarch" >{{$singlep->favstarch}}</span></dt>
+<dt class="list-group-item">Perfume: <span id="favperfume" >{{$singlep->favperfume}}</span></dt>
 
 
  <dt class="list-group-item active">Todos</dt>
@@ -54,7 +54,7 @@
     @if($singlep->lstatus == 'CONFIRMED')
     <a  class="btn btn-primary" href="{{ route('picklaundry',['id' => $singlep->id])}}" >Pick Laundry</a>
 
-    @elseif($singlep->lstatus =='PICKING')
+    @elseif($singlep->lstatus =='PICKED')
 
     <a class="btn btn-primary" href="{{ route('deliverlaundry',['id' => $singlep->id])}}" >Deliver Laundry</a>
 

@@ -14,6 +14,7 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Laundry');
     }
+    
      
 
     /**
@@ -22,7 +23,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','phone','addr','provider', 'provider_id',
+        'name','fname','lname', 'email', 'password','phone','addr','provider', 'provider_id',
     ];
 
     /**

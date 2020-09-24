@@ -19,38 +19,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Route::post('login', function (Request $request) {return $request;});
 Route::post('/register', 'Api\AuthController@register');
 Route::post('/login', 'Api\AuthController@login');
-Route::post('/add-country', 'CountryController@addCountry');
-//Route::post('/delete-country', 'CountryController@deleteCountry');
+
 Route::get('/countries', 'CountryController@Countries');
-
-
-Route::post('/add-state', 'StateController@addState');
 Route::post('/states', 'StateController@States');
-Route::post('/update-state', 'StateController@updateState');
-Route::post('/delete-state', 'StateController@deleteState');
-
-Route::post('/add-lga', 'LGAController@addLGA');
 Route::post('/lgas', 'LGAController@LGAs');
-Route::post('/update-lga', 'LGAController@updateLGA');
-Route::post('/delete-lga', 'LGAController@deleteLGA');
-
-
-
-Route::post('/add-item', 'KleanaryItemController@addItem');
 Route::get('/kleanaryitems', 'KleanaryItemController@kleanaryItems');
-Route::post('/update-item', 'KleanaryItemController@updateItem');
-Route::post('/delete-items', 'KleanaryItemController@deleteItem');
-
-Route::post('/add-perfume', 'PerfumeController@addItem');
 Route::get('/perfumes', 'PerfumeItemController@perfumeItems');
-Route::post('/update-perfume', 'PerfumeController@updateItem');
-Route::post('/delete-perfume', 'PerfumeController@deleteItem');
-
-
-Route::post('/add-starch', 'StarchController@addItem');
 Route::get('/starchs', 'StarchItemController@starchItems');
-Route::post('/update-starch', 'StarchController@updateItem');
-Route::post('/delete-starch', 'StarchController@deleteItem');
+//Route::get('/coupons', 'CouponController@Coupons');
+
 
 
 
@@ -60,6 +37,7 @@ Route::middleware('auth:api')->group(function() {
     Route::post('/updateuser', 'Api\UserController@accountupdate');
     Route::post('/updatefav', 'Api\UserController@addfavorite');
      Route::post('/requestlaundry', 'Api\LaundryController@makerequest');
+      Route::post('/give', 'Api\LaundryController@giveValue');
     Route::get('user/{userId}/detail', 'Api\UserController@show');
     Route::post('/logout', 'Api\UserController@logout');
     Route::post('/payment/callback', [

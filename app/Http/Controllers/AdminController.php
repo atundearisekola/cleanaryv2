@@ -17,7 +17,7 @@ class AdminController extends Controller
      */
     public function __construct()
     {
-       $this->middleware('admin');
+      // $this->middleware('admin');
         
     }
 
@@ -123,7 +123,7 @@ class AdminController extends Controller
      */
     protected function guard()
     {
-        return Auth::guard('admin');
+       // return Auth::guard('admin');
     }
 
 

@@ -82,6 +82,12 @@
       <span>Starch</span>
     </a>
   </li>
+  <li class="">
+    <a href="{{ route('coupon') }}">
+      <i class="fa fa-home"></i>
+      <span>Coupon</span>
+    </a>
+  </li>
 </ul>
  <script type="text/javascript" src={{URL::to("js/main/main.js")}}></script>
 @endsection

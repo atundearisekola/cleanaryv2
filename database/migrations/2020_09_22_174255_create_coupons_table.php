@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateKleanaryItemsTable extends Migration
+class CreateCouponsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateKleanaryItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('kleanary_items', function (Blueprint $table) {
+        Schema::create('coupons', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('admin_id');
             $table->timestamps();
-             $table->string('kname');
-              $table->string('kprice');
-               $table->string('coupon')->nullable();
+             $table->string('coupon');
+              $table->string('percent');
+               $table->string('expire');
+              
         });
     }
 
@@ -29,6 +31,6 @@ class CreateKleanaryItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kleanary_items');
+        Schema::dropIfExists('coupons');
     }
 }

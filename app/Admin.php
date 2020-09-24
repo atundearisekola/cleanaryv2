@@ -10,6 +10,11 @@ class Admin extends Authenticatable
 {
     use Notifiable;
 
+    public function Coupons()
+    {
+        return $this->hasMany('App\Coupon');
+    }
+
     /**
      * The attributes that are mass assignable.
      *

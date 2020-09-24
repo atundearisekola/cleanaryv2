@@ -52,9 +52,10 @@ class SocialLogin extends Controller
         $authUser = User::where('provider_id', $user->id)->first();
         if ($authUser) {
             
-        	$path = '/users/'. $authUser->id.'/limage';
-            if (! Storage::exists($path)) {
-            Storage::makeDirectory($path, $mode = 0777, true, true);
+        	    $path = public_path('images/users/'.$authUser->id.'/limage/');
+            if (! File::exists($path)) {
+            File::makeDirectory($path, $mode = 0777, true, true);
+            
             return $authUser;
         }}
         $newuser = User::create([
@@ -65,11 +66,10 @@ class SocialLogin extends Controller
             'provider_id' => $user->id
         ]);
 
-            $path = '/users/'. $newuser->id.'/limage';
-            if (! Storage::exists($path)) {
-            Storage::makeDirectory($path, $mode = 0777, true, true);
-
-        }
+               $path = public_path('images/users/'.$newuser->id.'/limage/');
+            if (! File::exists($path)) {
+            File::makeDirectory($path, $mode = 0777, true, true);
+            }
 
         return $newuser;
     

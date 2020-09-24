@@ -148,8 +148,8 @@
 
   
     <dt class="list-group-item active">Favorites</dt>
-<dt class="list-group-item">Starch: <span id="favstarch" >{{$singlel->favstarch["starchname"]}}</span></dt>
-<dt class="list-group-item">Perfume: <span id="favperfume" >{{$singlel->favperf["perfname"]}}</span></dt>
+<dt class="list-group-item">Starch: <span id="favstarch" >{{$singlel->favstarch}}</span></dt>
+<dt class="list-group-item">Perfume: <span id="favperfume" >{{$singlel->favperfume}}</span></dt>
 
  <dt class="list-group-item active">Todos</dt>
  <dt class="list-group-item">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\File;
 use App\User;
 use App\StarchList;
 use App\PerfumeList;
@@ -23,6 +24,8 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+
+       
         $request->validate([
             'name' => 'required', 
             'fname' => 'required', 
@@ -31,23 +34,54 @@ class AuthController extends Controller
             'password' => 'required|min:6'
         ]);
 
+        $existenUser = User::where('email', $request->email)->first();
+        if ($existenUser !=null) {
+           
+           return response()->json([
+            'error' => "user already exist",
+           
+          
+           ],409);
+        }else {
 
-        $user = User::create([
+           
+           /* $user = User::create([
             'name' => $request->name, 
             'fname' => $request->fname, 
             'lname' => $request->lname, 
             'email' => $request->email, 
             'password' => bcrypt($request->password)
         ]);
-        $token = $user->createToken($user->email.'-'.now());
-                $getList = $this->getLists();
+        */
 
+         $user = new User();
+         $user->fname = $request->fname;
+         $user->lname = $request->lname;
+         $user->name = $request->name;
+         $user->email = $request->email;
+         $user->password = bcrypt($request->password);
+          $s = ['starchname'=>"EazyOn", 'starchprice'=>30];
+        $user->favstarch= $s;
+         $p = ['perfname'=>"none", 'perfprice'=>0];
+        $user->favperf= $p;
+         if ($user->save()) {
+              $token = $user->createToken($user->email.'-'.now());
+               $path = public_path('images/users/'.$user->id.'/limage/');
+            if (! File::exists($path)) {
+            File::makeDirectory($path, $mode = 0777, true, true);
+            }
     
         return response()->json([
             'token' => $token->accessToken,
            'user' => $user,
-           'getLists'=>$getList,
+          
         ]);
+         }
+        }
+
+       
+          
+     
     }
 
     public function login(Request $request)
